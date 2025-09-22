@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="mn">
 <head>
-<meta charset="UTF-8">
-<title>Ухаалаг туслах</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
+  <meta charset="UTF-8">
+  <title>Ухаалаг туслах</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -456,155 +456,189 @@
         font-size: 13px;
       }
     }
-</style>
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></div>
-  <h2>Гэрээ байгуулах</h2>
-</header>
+  <header>
+    <div class="back-btn" onclick="history.back()">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <h2>Гэрээ байгуулах</h2>
+  </header>
 
-<div class="main-content">
-  <div class="contract-container">
-    <div class="contract-header">
-      <h3>Гэрээний урьдчилсан нөхцөл</h3>
-      <div class="page-controls">
-        <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
-        <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+  <div class="main-content">
+    <div class="contract-container">
+      <div class="contract-header">
+        <h3>Гэрээний урьдчилсан нөхцөл</h3>
+        <div class="page-controls">
+          <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
+          <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+      <div class="contract">
+        <embed src="https://bat-bbe.github.io/DigiPay/geree.pdf" type="application/pdf" />
       </div>
     </div>
-    <div class="contract">
-      <embed src="https://bat-bbe.github.io/DigiPay/geree.pdf" type="application/pdf" />
-    </div>
-  </div>
 
-  <div class="assistant">
-    <h3><i class="fas fa-robot"></i> Ухаалаг туслах</h3>
-    <div class="assistant-content">
-      <div class="assistant-avatar"><i class="fas fa-microphone-alt"></i></div>
-      <p>Би таны гэрээний агуулгыг уншиж, тайлбарлахад туслахад бэлэн байна.</p>
-      <div class="voice-indicator">
-        <div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div>
+    <div class="assistant">
+      <h3><i class="fas fa-robot"></i> Ухаалаг туслах</h3>
+      <div class="assistant-content">
+        <div class="assistant-avatar">
+          <i class="fas fa-microphone-alt"></i>
+        </div>
+        <p>Би таны гэрээний агуулгыг уншиж, тайлбарлахад туслахад бэлэн байна.</p>
+        <div class="voice-indicator">
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+        </div>
       </div>
     </div>
+
+    <div class="progress-container">
+      <div class="progress-info">
+        <span>Уншиж байна...</span>
+        <span id="progress-percent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="control-btn" onclick="play()">
+        <i class="fas fa-play"></i> Эхлүүлэх
+      </button>
+      <button class="control-btn" onclick="pause()">
+        <i class="fas fa-pause"></i> Зогсоох
+      </button>
+      <button class="control-btn" onclick="stop()">
+        <i class="fas fa-stop"></i> Дуусгах
+      </button>
+    </div>
+
+    <div class="actions">
+      <button class="action-btn cancel">
+        <i class="fas fa-times"></i> Болих
+      </button>
+      <button class="action-btn ok">
+        <i class="fas fa-check"></i> Зөвшөөрөх
+      </button>
+    </div>
   </div>
 
-  <div class="progress-container">
-    <div class="progress-info"><span>Уншиж байна...</span><span id="progress-percent">0%</span></div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <span id="notification-text">Амжилттай дууслаа</span>
   </div>
 
-  <div class="controls">
-    <button class="control-btn" id="play-btn"><i class="fas fa-play"></i> Эхлүүлэх</button>
-    <button class="control-btn" id="pause-btn"><i class="fas fa-pause"></i> Зогсоох</button>
-    <button class="control-btn" id="stop-btn"><i class="fas fa-stop"></i> Дуусгах</button>
-  </div>
-
-  <div class="actions">
-    <button class="action-btn cancel"><i class="fas fa-times"></i> Болих</button>
-    <button class="action-btn ok"><i class="fas fa-check"></i> Зөвшөөрөх</button>
-  </div>
-</div>
-
-<div class="notification" id="notification"><i class="fas fa-check-circle"></i><span id="notification-text">Амжилттай дууслаа</span></div>
-
-<script>
+  <script>
     let utter;
     let progressInterval;
-    let textCache = "";
     const progressFill = document.getElementById('progress-fill');
     const progressPercent = document.getElementById('progress-percent');
     const notification = document.getElementById('notification');
     const notificationText = document.getElementById('notification-text');
-
+    
 
     function toggleVoiceAnimation(isPlaying) {
-    document.querySelectorAll('.voice-bar').forEach(bar => {
-        bar.style.animationPlayState = isPlaying ? 'running' : 'paused';
-    });
+      const voiceBars = document.querySelectorAll('.voice-bar');
+      voiceBars.forEach(bar => {
+        if (isPlaying) {
+          bar.style.animationPlayState = 'running';
+        } else {
+          bar.style.animationPlayState = 'paused';
+        }
+      });
     }
-
-
+    
     function updateProgress(value) {
-    progressFill.style.width = value + '%';
-    progressPercent.textContent = Math.round(value) + '%';
+      progressFill.style.width = value + '%';
+      progressPercent.textContent = Math.round(value) + '%';
     }
-
-    function startProgress() {
-    let progress = 0;
-    progressInterval = setInterval(() => {
-        progress += 0.3;
-        if (progress <= 100) updateProgress(progress);
-    }, 100);
-    }
-
-    function stopProgress() {
-    clearInterval(progressInterval);
-    }
-
 
     function showNotification(message, duration = 3000) {
-    notificationText.textContent = message;
-    notification.classList.add('show');
-    setTimeout(() => notification.classList.remove('show'), duration);
+      notificationText.textContent = message;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, duration);
+    }
+    
+    function play() {
+      stop();
+      fetch("https://bat-bbe.github.io/DigiPay/geree.txt")
+        .then(response => response.text())
+        .then(text => {
+          utter = new SpeechSynthesisUtterance(text);
+          utter.lang = "mn-MN";
+          utter.rate = 1;
+          utter.pitch = 1;
+          
+          utter.onstart = function() {
+            toggleVoiceAnimation(true);
+            let progress = 0;
+            progressInterval = setInterval(() => {
+              progress += 0.3;
+              if (progress <= 100) {
+                updateProgress(progress);
+              }
+            }, 100);
+          };
+
+          utter.onend = function() {
+            clearInterval(progressInterval);
+            updateProgress(100);
+            toggleVoiceAnimation(false);
+            showNotification("Гэрээний уншилт дууслаа");
+          };
+
+          utter.onerror = function() {
+            clearInterval(progressInterval);
+            toggleVoiceAnimation(false);
+            showNotification("Алдаа гарлаа. Дахин оролдоно уу.", 5000);
+          };
+          
+          speechSynthesis.speak(utter);
+        })
+        .catch(err => {
+          console.error("Гэрээний файлыг уншиж чадсангүй:", err);
+          showNotification("Гэрээний файл олдсонгүй", 5000);
+        });
     }
 
-    function speakText(text) {
-    if (!text) return;
-    stop();
-    utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "mn-MN";
-    utter.rate = 1;
-    utter.pitch = 1;
-
-    utter.onstart = function() { toggleVoiceAnimation(true); startProgress(); };
-    utter.onend = function() { toggleVoiceAnimation(false); stopProgress(); updateProgress(100); showNotification("Гэрээний уншилт дууслаа"); };
-    utter.onerror = function() { toggleVoiceAnimation(false); stopProgress(); showNotification("Алдаа гарлаа", 5000); };
-
-    speechSynthesis.speak(utter);
-    }
-
-    document.getElementById('play-btn').addEventListener('click', function() {
-    if (textCache) {
-        speakText(textCache);
-    } else {
-        fetch("geree.txt")
-        .then(res => res.text())
-        .then(text => { textCache = text; speakText(textCache); })
-        .catch(err => { console.error(err); showNotification("Гэрээний файл олдсонгүй", 5000); });
-    }
-    });
-
-    document.getElementById('pause-btn').addEventListener('click', function() {
-    if (speechSynthesis.speaking) {
+    function pause() {
+      if (speechSynthesis.speaking) {
         speechSynthesis.pause();
         toggleVoiceAnimation(false);
         clearInterval(progressInterval);
         showNotification("Түр зогссон");
+      }
     }
-    });
-
-    document.getElementById('stop-btn').addEventListener('click', function() { stop(); });
-
+    
     function stop() {
-    speechSynthesis.cancel();
-    utter = null;
-    toggleVoiceAnimation(false);
-    clearInterval(progressInterval);
-    updateProgress(0);
+      speechSynthesis.cancel();
+      utter = null;
+      toggleVoiceAnimation(false);
+      clearInterval(progressInterval);
+      updateProgress(0);
     }
 
     document.querySelector('.action-btn.ok').addEventListener('click', function() {
-    showNotification("Гэрээ амжилттай байгуулагдлаа");
+      showNotification("Гэрээ амжилттай байгуулагдлаа");
     });
 
     document.querySelector('.action-btn.cancel').addEventListener('click', function() {
-    if (confirm("Та гэрээ байгуулахаа цуцлахдаа итгэлтэй байна уу?")) {
+      if (confirm("Та гэрээ байгуулахаа цуцлахдаа итгэлтэй байна уу?")) {
         stop();
         showNotification("Үйлдэл цуцлагдлаа");
-    }
+      }
     });
-</script>
+  </script>
+
 </body>
 </html>
