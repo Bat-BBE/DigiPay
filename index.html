@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <title>Ухаалаг туслах</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --primary: #2e7d32;
+      --primary-dark: #1b5e20;
+      --primary-light: #4caf50;
+      --accent: #ff6f00;
+      --danger: #d32f2f;
+      --danger-dark: #b71c1c;
+      --text: #2d3748;
+      --text-light: #718096;
+      --background: #f7fafc;
+      --card-bg: #ffffff;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--background);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--text);
+      padding-bottom: 20px;
+    }
+
+    header {
+      width: 100%;
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .back-btn {
+      font-size: 22px;
+      margin-right: 16px;
+      cursor: pointer;
+      color: var(--primary);
+      transition: all 0.2s ease;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .back-btn:hover {
+      background-color: rgba(46, 125, 50, 0.1);
+      transform: scale(1.1);
+    }
+    
+    header h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .main-content {
+      width: 90%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 24px;
+    }
+    .contract-container {
+      width: 100%;
+      margin-bottom: 24px;
+    }
+    
+    .contract-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .contract-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .page-controls {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .page-btn {
+      background: var(--primary-light);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    
+    .page-btn:hover {
+      background: var(--primary);
+    }
+    
+    .contract {
+      width: 100%;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      height: 400px;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+    }
+    
+    .contract:hover {
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .contract embed {
+      border-radius: 8px;
+      width: 100%;
+      height: 100%;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    }
+    .assistant {
+      width: 100%;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .assistant:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .assistant h3 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .assistant-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .assistant-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .assistant-avatar i {
+      font-size: 60px;
+      color: white;
+    }
+    
+    .voice-indicator {
+      width: 100%;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 16px;
+    }
+    
+    .voice-bar {
+      width: 6px;
+      height: 20px;
+      background-color: var(--primary-light);
+      margin: 0 3px;
+      border-radius: 3px;
+      animation: voiceAnimation 1.5s infinite ease-in-out;
+      opacity: 0.7;
+    }
+    
+    .voice-bar:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .voice-bar:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    .voice-bar:nth-child(4) {
+      animation-delay: 0.6s;
+    }
+    
+    .voice-bar:nth-child(5) {
+      animation-delay: 0.8s;
+    }
+    
+    @keyframes voiceAnimation {
+      0%, 100% { transform: scaleY(0.5); }
+      50% { transform: scaleY(1.8); }
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      width: 100%;
+    }
+    
+    .control-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 16px 20px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .control-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .control-btn:active {
+      transform: translateY(0);
+    }
+
+    /* --- Progress Bar --- */
+    .progress-container {
+      width: 100%;
+      margin-bottom: 24px;
+    }
+    
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background-color: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--primary-light), var(--primary));
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    /* --- Actions --- */
+    .actions {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    
+    .action-btn {
+      flex: 1;
+      padding: 18px 0;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .action-btn.cancel {
+      background: var(--danger);
+    }
+    
+    .action-btn.cancel:hover {
+      background: var(--danger-dark);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .action-btn.ok {
+      background: var(--primary);
+    }
+    
+    .action-btn.ok:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .action-btn:active {
+      transform: translateY(0);
+    }
+
+    /* --- Notification --- */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--card-bg);
+      color: var(--text);
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-hover);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transition: all 0.4s ease;
+      z-index: 1000;
+    }
+    
+    .notification.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    .notification i {
+      font-size: 20px;
+      color: var(--primary);
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      header {
+        padding: 16px 20px;
+      }
+      
+      .main-content {
+        width: 95%;
+      }
+      
+      .contract {
+        height: 320px;
+      }
+      
+      .assistant {
+        padding: 20px;
+      }
+      
+      .assistant-avatar {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .assistant-avatar i {
+        font-size: 50px;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      header h2 {
+        font-size: 18px;
+      }
+      
+      .contract {
+        height: 280px;
+        padding: 16px;
+      }
+      
+      .controls {
+        gap: 12px;
+      }
+      
+      .control-btn {
+        min-width: 80px;
+        padding: 14px 16px;
+        font-size: 14px;
+      }
+      
+      .actions {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .action-btn {
+        padding: 16px 0;
+        font-size: 15px;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .contract {
+        height: 240px;
+      }
+      
+      .assistant-avatar {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .assistant-avatar i {
+        font-size: 40px;
+      }
+      
+      .control-btn {
+        min-width: 70px;
+        padding: 12px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="back-btn" onclick="history.back()">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <h2>Гэрээ байгуулах</h2>
+  </header>
+
+  <div class="main-content">
+    <div class="contract-container">
+      <div class="contract-header">
+        <h3>Гэрээний урьдчилсан нөхцөл</h3>
+        <div class="page-controls">
+          <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
+          <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+      <div class="contract">
+        <embed src="geree.txt" type="application/pdf" />
+      </div>
+    </div>
+
+    <div class="assistant">
+      <h3><i class="fas fa-robot"></i> Ухаалаг туслах</h3>
+      <div class="assistant-content">
+        <div class="assistant-avatar">
+          <i class="fas fa-microphone-alt"></i>
+        </div>
+        <p>Би таны гэрээний агуулгыг уншиж, тайлбарлахад туслахад бэлэн байна.</p>
+        <div class="voice-indicator">
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-info">
+        <span>Уншиж байна...</span>
+        <span id="progress-percent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="control-btn" onclick="play()">
+        <i class="fas fa-play"></i> Эхлүүлэх
+      </button>
+      <button class="control-btn" onclick="pause()">
+        <i class="fas fa-pause"></i> Зогсоох
+      </button>
+      <button class="control-btn" onclick="stop()">
+        <i class="fas fa-stop"></i> Дуусгах
+      </button>
+    </div>
+
+    <div class="actions">
+      <button class="action-btn cancel">
+        <i class="fas fa-times"></i> Болих
+      </button>
+      <button class="action-btn ok">
+        <i class="fas fa-check"></i> Зөвшөөрөх
+      </button>
+    </div>
+  </div>
+
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <span id="notification-text">Амжилттай дууслаа</span>
+  </div>
+
+  <script>
+    let utter;
+    let progressInterval;
+    const progressFill = document.getElementById('progress-fill');
+    const progressPercent = document.getElementById('progress-percent');
+    const notification = document.getElementById('notification');
+    const notificationText = document.getElementById('notification-text');
+    
+    // Дууны долгион анимацийг эхлүүлэх/зогсоох
+    function toggleVoiceAnimation(isPlaying) {
+      const voiceBars = document.querySelectorAll('.voice-bar');
+      voiceBars.forEach(bar => {
+        if (isPlaying) {
+          bar.style.animationPlayState = 'running';
+        } else {
+          bar.style.animationPlayState = 'paused';
+        }
+      });
+    }
+    
+    // Прогресс барыг шинэчлэх
+    function updateProgress(value) {
+      progressFill.style.width = value + '%';
+      progressPercent.textContent = Math.round(value) + '%';
+    }
+    
+    // Мэдэгдэл харуулах
+    function showNotification(message, duration = 3000) {
+      notificationText.textContent = message;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, duration);
+    }
+    
+    // Тоглуулах функц
+    function play() {
+      stop();
+      fetch("geree.txt")
+        .then(response => response.text())
+        .then(text => {
+          utter = new SpeechSynthesisUtterance(text);
+          utter.lang = "mn-MN";
+          utter.rate = 1;
+          utter.pitch = 1;
+          
+          // Эхлэх үед
+          utter.onstart = function() {
+            toggleVoiceAnimation(true);
+            let progress = 0;
+            progressInterval = setInterval(() => {
+              progress += 0.5;
+              if (progress <= 100) {
+                updateProgress(progress);
+              }
+            }, 50);
+          };
+          
+          // Дууссан үед
+          utter.onend = function() {
+            clearInterval(progressInterval);
+            updateProgress(100);
+            toggleVoiceAnimation(false);
+            showNotification("Гэрээний уншилт дууслаа");
+          };
+          
+          // Алдаа гарсан үед
+          utter.onerror = function() {
+            clearInterval(progressInterval);
+            toggleVoiceAnimation(false);
+            showNotification("Алдаа гарлаа. Дахин оролдоно уу.", 5000);
+          };
+          
+          speechSynthesis.speak(utter);
+        })
+        .catch(err => {
+          console.error("Гэрээний файлыг уншиж чадсангүй:", err);
+          showNotification("Гэрээний файл олдсонгүй", 5000);
+        });
+    }
+    
+    // Түр зогсоох функц
+    function pause() {
+      if (speechSynthesis.speaking) {
+        speechSynthesis.pause();
+        toggleVoiceAnimation(false);
+        clearInterval(progressInterval);
+        showNotification("Түр зогссон");
+      }
+    }
+    
+    // Зогсоох функц
+    function stop() {
+      speechSynthesis.cancel();
+      utter = null;
+      toggleVoiceAnimation(false);
+      clearInterval(progressInterval);
+      updateProgress(0);
+    }
+    
+    // Зөвшөөрөх товчны үйлдэл
+    document.querySelector('.action-btn.ok').addEventListener('click', function() {
+      showNotification("Гэрээ амжилттай байгуулагдлаа");
+      // Энд гэрээ байгуулах логик орох болно
+    });
+    
+    // Болих товчны үйлдэл
+    document.querySelector('.action-btn.cancel').addEventListener('click', function() {
+      if (confirm("Та гэрээ байгуулахаа цуцлахдаа итгэлтэй байна уу?")) {
+        stop();
+        showNotification("Үйлдэл цуцлагдлаа");
+        // Энд цуцлах логик орох болно
+      }
+    });
+  </script>
+
+</body>
+</html>
