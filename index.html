@@ -543,7 +543,7 @@
     const notification = document.getElementById('notification');
     const notificationText = document.getElementById('notification-text');
     
-    // Дууны долгион анимацийг эхлүүлэх/зогсоох
+
     function toggleVoiceAnimation(isPlaying) {
       const voiceBars = document.querySelectorAll('.voice-bar');
       voiceBars.forEach(bar => {
@@ -555,13 +555,11 @@
       });
     }
     
-    // Прогресс барыг шинэчлэх
     function updateProgress(value) {
       progressFill.style.width = value + '%';
       progressPercent.textContent = Math.round(value) + '%';
     }
-    
-    // Мэдэгдэл харуулах
+
     function showNotification(message, duration = 3000) {
       notificationText.textContent = message;
       notification.classList.add('show');
@@ -571,10 +569,9 @@
       }, duration);
     }
     
-    // Тоглуулах функц
     function play() {
       stop();
-      fetch("geree.txt")
+      fetch("https://bat-bbe.github.io/DigiPay/geree.txt")
         .then(response => response.text())
         .then(text => {
           utter = new SpeechSynthesisUtterance(text);
@@ -582,7 +579,6 @@
           utter.rate = 1;
           utter.pitch = 1;
           
-          // Эхлэх үед
           utter.onstart = function() {
             toggleVoiceAnimation(true);
             let progress = 0;
@@ -593,16 +589,14 @@
               }
             }, 100);
           };
-          
-          // Дууссан үед
+
           utter.onend = function() {
             clearInterval(progressInterval);
             updateProgress(100);
             toggleVoiceAnimation(false);
             showNotification("Гэрээний уншилт дууслаа");
           };
-          
-          // Алдаа гарсан үед
+
           utter.onerror = function() {
             clearInterval(progressInterval);
             toggleVoiceAnimation(false);
@@ -616,8 +610,7 @@
           showNotification("Гэрээний файл олдсонгүй", 5000);
         });
     }
-    
-    // Түр зогсоох функц
+
     function pause() {
       if (speechSynthesis.speaking) {
         speechSynthesis.pause();
@@ -627,7 +620,6 @@
       }
     }
     
-    // Зогсоох функц
     function stop() {
       speechSynthesis.cancel();
       utter = null;
@@ -635,19 +627,15 @@
       clearInterval(progressInterval);
       updateProgress(0);
     }
-    
-    // Зөвшөөрөх товчны үйлдэл
+
     document.querySelector('.action-btn.ok').addEventListener('click', function() {
       showNotification("Гэрээ амжилттай байгуулагдлаа");
-      // Энд гэрээ байгуулах логик орох болно
     });
-    
-    // Болих товчны үйлдэл
+
     document.querySelector('.action-btn.cancel').addEventListener('click', function() {
       if (confirm("Та гэрээ байгуулахаа цуцлахдаа итгэлтэй байна уу?")) {
         stop();
         showNotification("Үйлдэл цуцлагдлаа");
-        // Энд цуцлах логик орох болно
       }
     });
   </script>
