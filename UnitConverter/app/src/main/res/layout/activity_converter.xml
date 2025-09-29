@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1A1A1A"
+    tools:context=".ConverterActivity"
+    android:padding="16dp">
+
+        <!-- Back arrow -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_media_previous"
+            android:contentDescription="@string/back_button"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!-- Category name -->
+        <TextView
+            android:id="@+id/tvCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/length"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#BB86FC"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/btnBack"/>
+
+        <!-- From & To horizontal layout -->
+        <LinearLayout
+            android:id="@+id/layoutFromTo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintTop_toBottomOf="@id/btnBack"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp">
+
+                <!-- From label & spinner -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvFromLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/from"
+                            android:textColor="#FFFFFF"/>
+                        <Spinner
+                            android:id="@+id/spFrom"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"/>
+                </LinearLayout>
+
+                <!-- Spacer -->
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content"/>
+
+                <!-- To label & spinner -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvToLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/to"
+                            android:textColor="#FFFFFF"/>
+                        <Spinner
+                            android:id="@+id/spTo"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"/>
+                </LinearLayout>
+        </LinearLayout>
+
+        <!-- Input & Output horizontal layout -->
+        <LinearLayout
+            android:id="@+id/layoutInputOutput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintTop_toBottomOf="@id/layoutFromTo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp">
+
+                <!-- Input label & EditText -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvInputLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/input_data"
+                            android:textColor="#FFFFFF"/>
+
+                        <EditText
+                            android:id="@+id/etInput"
+                            android:layout_width="126dp"
+                            android:layout_height="48dp"
+                            android:hint="@string/enter_value"
+                            android:autofillHints="none"
+                            android:inputType="numberDecimal"
+                            android:padding="8dp"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#888888" />
+                </LinearLayout>
+
+                <!-- Spacer -->
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content"/>
+
+                <!-- Output label & EditText -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvOutputLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/output_data"
+                            android:textColor="#FFFFFF"/>
+
+                        <EditText
+                            android:id="@+id/etOutput"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:focusable="false"
+                            android:hint="@string/output_data"
+                            android:inputType="numberDecimal"
+                            android:autofillHints="none"
+                            android:padding="8dp"
+                            android:textColor="#FFFFFF" />
+                </LinearLayout>
+        </LinearLayout>
+
+        <!-- Convert button -->
+        <Button
+            android:id="@+id/btnConvert"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/result"
+            android:backgroundTint="#BB86FC"
+            android:textColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/layoutInputOutput"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp"/>
+
+        <!-- Result text -->
+        <TextView
+            android:id="@+id/tvResult"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/result_format"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/btnConvert"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
