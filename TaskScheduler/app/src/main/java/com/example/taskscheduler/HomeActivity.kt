@@ -46,9 +46,19 @@ class HomeActivity : AppCompatActivity() {
         val currentTime = Calendar.getInstance().time
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
-        //task shalgah baigaa esehiig
+        val projectSection = findViewById<LinearLayout>(R.id.projectsContainer)
+        val projectsRow = findViewById<LinearLayout>(R.id.projectsRow)
+        val taskSection = findViewById<LinearLayout>(R.id.taskSection)
+
+        val overdueSection = findViewById<LinearLayout>(R.id.overdueSection)
+        val overdueContainer = findViewById<LinearLayout>(R.id.overdueContainer)
+        val completedSection = findViewById<LinearLayout>(R.id.completedSection)
+        val completedContainer = findViewById<LinearLayout>(R.id.completedContainer)
+
+        taskContainer.removeAllViews()
+        projectsRow.removeAllViews()
+
         if (taskList.isEmpty()) {
-            hideAllSections()
             val emptyText = TextView(this).apply {
                 text = "No tasks yet"
                 textSize = 16f
@@ -58,31 +68,46 @@ class HomeActivity : AppCompatActivity() {
             return
         }
 
-        //hugatsaa n duusaagui mun hiigegui bga
+        //hiigdegu tasks
         val upcomingIncompleteTasks = taskList.filter { task ->
             val taskDateTime = dateFormat.parse("${task.date} ${task.time}")
             taskDateTime != null && taskDateTime.after(currentTime) && !task.isDone
         }
 
-        //hugatsaa n duussan buguud hiigegui orhison
+        //hugatsaa n duussan hiigdegu tasks
         val pastIncompleteTasks = taskList.filter { task ->
             val taskDateTime = dateFormat.parse("${task.date} ${task.time}")
             taskDateTime != null && taskDateTime.before(currentTime) && !task.isDone
         }
 
-        //hiisen daalgavar
+        //hiigdsen tasks
         val completedTasks = taskList.filter { it.isDone }
 
-        taskContainer.removeAllViews()
+        //project category group hiij haruulah
+        val groupedTasks = upcomingIncompleteTasks.groupBy { it.category.ifEmpty { "General" } }
+        if (groupedTasks.isNotEmpty()) {
+            projectSection.visibility = View.VISIBLE
+            for ((categoryName, tasks) in groupedTasks) {
+                val projectView = layoutInflater.inflate(R.layout.item_project_card, projectsRow, false)
+                val tvName = projectView.findViewById<TextView>(R.id.tvProjectName)
+                val tvStatus = projectView.findViewById<TextView>(R.id.tvProjectStatus)
+                val tvCompleted = projectView.findViewById<TextView>(R.id.tvProjectCompleted)
+                val tvDate = projectView.findViewById<TextView>(R.id.tvProjectDate)
+
+                tvName.text = categoryName
+                tvStatus.text = "In progress"
+                tvCompleted.text = "${tasks.size} task(s)"
+                tvDate.text = tasks.firstOrNull()?.date ?: ""
+                projectsRow.addView(projectView)
+            }
+        }
+
         if (upcomingIncompleteTasks.isNotEmpty()) {
-            findViewById<LinearLayout>(R.id.taskSection).visibility = View.VISIBLE
+            taskSection.visibility = View.VISIBLE
             for (task in upcomingIncompleteTasks) {
                 addTaskView(task)
             }
-        } else {
-            findViewById<LinearLayout>(R.id.taskSection).visibility = View.GONE
         }
-
 
         if (pastIncompleteTasks.isNotEmpty()) {
             overdueSection.visibility = View.VISIBLE
@@ -90,8 +115,6 @@ class HomeActivity : AppCompatActivity() {
             for (task in pastIncompleteTasks) {
                 addOverdueTaskView(task)
             }
-        } else {
-            overdueSection.visibility = View.GONE
         }
 
         if (completedTasks.isNotEmpty()) {
@@ -100,13 +123,7 @@ class HomeActivity : AppCompatActivity() {
             for (task in completedTasks) {
                 addCompletedTaskView(task)
             }
-        } else {
-            completedSection.visibility = View.GONE
         }
-    }
-    private fun hideAllSections() {
-        completedSection.visibility = View.GONE
-        overdueSection.visibility = View.GONE
     }
 
     private fun addTaskView(task: TaskModel) {
@@ -154,7 +171,7 @@ class HomeActivity : AppCompatActivity() {
         }
         completedContainer.addView(taskView)
     }
-
+    
     private fun addOverdueTaskView(task: TaskModel) {
         val taskView = layoutInflater.inflate(R.layout.item_task_card, overdueContainer, false)
         val tvTaskTitle = taskView.findViewById<TextView>(R.id.tvTaskCardTitle)

@@ -162,12 +162,21 @@
                 android:visibility="visible"
                 android:layout_marginTop="20dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:text="Ongoing Task"
+                    android:textStyle="bold"
+                    android:textColor="#222222"
+                    android:textSize="20sp" />
+
                 <LinearLayout
                     android:id="@+id/overdueSection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_marginTop="20dp">
 
                     <TextView
@@ -191,7 +200,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_marginTop="20dp">
 
                     <TextView
@@ -209,15 +218,6 @@
                         android:orientation="vertical"
                         android:paddingTop="10dp" />
                 </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ongoing Task"
-                    android:textStyle="bold"
-                    android:textColor="#222222"
-                    android:textSize="20sp" />
-
 
                 <LinearLayout
                     android:id="@+id/taskContainer"
