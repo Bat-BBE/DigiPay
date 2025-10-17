@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">TaskScheduler</string>
+    <string name="welcome">WELCOME TO TASK SCHEDULER</string>
+    <string name="dec">Releases time for great affairs</string>
+    <string name="home_start">GET STARTED</string>
+    <string name="hello">Hello, Milana Richards</string>
+    <string name="nice">Have a nice day!</string>
+    <string name="task">Ongoing task</string>
+    <string name="see">See more</string>
+    <string name="create">CREATE NEW TASK</string>
+    <string name="name">Name</string>
+    <string name="date">Date</string>
+</resources>
